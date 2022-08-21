@@ -1,0 +1,673 @@
+    ###########################################################################################################
+    ESTE DOC TEM COMO OBJETIVO CRIAR E DOCUMENTAR A BIBLIOTECA USADA NA EMPRESA, COLOCAR OBSERVAÇOES, EXEMPLOS
+	E TODO TIPO DE CONTEUDO PARA PESQUISA QUE POSSA VIR A CONTRIBUIR AOS QUE EMBARCARAM RECENTEMENTE NA JORNADA
+	OU NA HORA DA CONSTRUÇAO,  MANUTENÇAO OU REFATORAÇAO DOS PROJETOS,  A AJUDA DE TODOS SEMPRE SERA MUITO BEM
+	VINDA E TODO CONTEUDO SEMPRE VAI FACILITAR E POUPAR O TEMPO DE ALGUEM.
+	
+	PARA EDICAO E ORGANIZAÇAO O DOC SEGUIRA UM "INDICE" BASEADO EM 
+		>> INFORMAÇOES E DICAS/CAMINHOS DO SISTEMA	
+		>> SQL ( TIPOS DE CONSULTA, TIPOS DE CLASSES CONCEITOS E EXCESSOES)
+		>> JAVASCRIPT ( FUNÇOES USADAS NA EMPRESA PARA EVENTOS DE BOX/CLIC E IMPORTAÇAO PARA O BACKEND)
+		>> JAVA ( CONCEITOS, FUNÇOES E EXEMPLOS )
+		>> HTML ( TAGS MAIS USADAS PARA CRIAÇAO DE TABELAS, LISTAS, BOTOES E ETC )
+		-----------------------------------------------------------------------------------------------
+		>> EXEMPLOS DE UNIAO ENTRE JS/JAVA/SQL DO BACK AO FRONT COM APLICAÇAO NA PRATICA 
+		-----------------------------------------------------------------------------------------------
+		>> E POR FIM TENTAR DOCUMENTAR TODAS FUNÇOES/CLASSES E ATRIBUTOS CRIADOS PARA A BIBLIOTECA DA EMPRESA  
+	
+	
+	###########################################################################################################
+	
+							OBSERVAÇOES DE SISTEMA E METODOS DE PRODUÇAO
+	
+	###########################################################################################################								
+    
+	--------------------------------------------------------------------------------------------------------------
+								PROCESSO DE SOLICICATAO DE ENTREGA 
+	--------------------------------------------------------------------------------------------------------------
+	
+    // DEFINIR PACOTE    
+		--> CRIAR NOVO PACOTE 
+    // DEFINIR ESPECIFICAÇOES   
+		--> MENOR (CLIENTE)   
+		--> MAIOR (DEV) 
+    // MARCAR ORDEM EXATA DE PROCESSO   
+		--> + OBJETO FW (ADCIONAR) 
+    // VOLTAR PARA DASH CIRAR EXPLICAÇAO NO MYHELP
+    // APOS EXPLICAÇAO NO MY HELP   
+	// AÇOES  
+		--> CONCLUIR SOLICITAÇAO   
+		--> INFORMAR TODO O PROCESSO  
+    // DEFINIR PACOTE  
+	// AÇOES    
+		--> LIBEREAR PARA HOMOLOGAÇAO
+	
+   --------------------------------------------------------------------------------------------------------------   
+									OBSERVACOES DE CRIACAO DE VIEW EM TABELAS
+   --------------------------------------------------------------------------------------------------------------
+   
+   // E NECESSARIO ADICIONAR UM SPAÇO "  " ENTRE O SQL IMPORTADO E A " " DO JAVA
+   // USAR CHAVE DO TIPO  "RETORNO" EM CASO DE CRIAÇAO NO BANCO DE DADOS
+   // USA CHAVE DO TIPO "NAO" QUANDO CRIADO NA VIEW  
+   // ESTRUTURA PADRAO DE FORMATAÇAO LEVA CAIXA DO TIPO VALIDAÇAO "PRODUTO X MÍNIMO/MÁXIMO/ECONÔMICO "  
+				VALIDO NAO VALIDO ADICIONADO NA 1 LINHA FINAL DA CORRENTE   
+   //USAR DOUBLE CLICK PARA SELECIONAR SIMILIARES( MARCA TODOS ITENS IDENTICOS)
+   // PODE SELECIONAR O SQL INTEIRO AO DAR DOUBLE CLICK ANTES DAS ASPAS DE INSERÇAO
+   //STRTOBOOL = CONVERSAO USADA NO JAVA PARA TRANSFORMAR ITEM DE STRING PARA BOOLEANO STRING TO BOOLEAN    
+   // ADCIONAR OP  DENTRO DA REGRA DE NEGOCIO  
+		--> CAMPO DO TIPO RETORNO QUANDO FOR ( ORIGEM)  
+		--> CAMPO DE TIPO ( TIPO )  QUANDO FOR DERIVADO DE TABELA 
+   
+      
+  
+  --------------------------------------------------------------------------------------------------------------									
+										VALIDAR REGRA DE NEGOCIO
+  --------------------------------------------------------------------------------------------------------------
+ 
+											1º PARTE:  
+  
+  1 - ERP > MES > OP ELETRÔNICA > REGRAS DE NEGÓCIO > OP ELETRÔNICA   
+   
+  NO FIELDSET "OP ELETRÔNICA":  
+  
+  1.1 CRIAR REGRA DE NEGÓCIO "CÓD. ROTEIRO PADRÃO"    
+  
+  TABELA:	NOME_TABELA
+  CAMPO:	NOME_DO_CAMPO_REFERENCIA
+  TABELA: 	ROTEIRO    
+  CAMPO: 	CROTEIRO   
+  NÃO OBRIGATÓRIO  
+  
+  1.2 CRIAR REGRA DE NEGÓCIO "DIAS P/FRENTE PADRÃO"    
+  TIPO INTEIRO  
+  NÃO OBRIGATÓRIO 
+  
+										
+										    2°  PARTE
+   
+  2 - ERP > MES > OP ELETRÔNICA > OP ELETRÔNICA   
+  
+  
+  NO INIT DESTA TELA, VALIDAR AS DUAS REGRAS DE NEGOCIO ACIMA,  
+  QUANDO ELAS ESTIVEREM PREENCHIDAS
+  DEVERA SETAR POR PADRÃO ESTE VALORES NOS CAMPOS DA TELA. 
+  
+  --------------------------------------------------------------------------------------------------------------
+										RETORNAREGRANEGOCIO  
+  --------------------------------------------------------------------------------------------------------------  
+  
+  -->	FUNCTION RETORNAREGRANEGOCIO(COD_REGRA) {  
+  -->      VAR VALOR_REGRA;  
+  -->      EXECUTASERVICO(
+  -->			'TECNICONPARAMETROSFORM', 'PARAMETROSFORMIMPL.RETORNAREGRANEGOCIO',  
+  -->  			 NULL, FUNCTION(DATA) {
+  -->      		 VALORREGRA = ISJSON(DATA.TRIM()) || DATA.TRIM();    
+  -->   }, 
+  -->   '&SREGRANEGOCIOPARAM=' + COD_REGRA, FALSE);  
+  -->   RETURN VALOR_REGRA;  
+  -->	}   
+  -------------------------------------------------------------------------------------------------------------- 
+												ESCOPO   
+  --------------------------------------------------------------------------------------------------------------  
+  --> FUNCAO CAPTURA DE TELA ( ID DO OBJETVO) NOME DO OBJETO =   
+  
+  --> RETORNAREGRANEGOCIO CAPTURADO NO CONSOLE (ID ) DO ITEM NA TABELA  
+    
+  --> TELA ( LENDO EVENTO ) ( #ID BOTAO ) .VALUE = RETORNAREGRADENEGOCIO  
+ 
+  --> TELA.QUERYSELECTOR('#CROTEIRO').VALUE = RETORNAREGRANEGOCIO(ID ITEM TABELA);  
+ 
+  --> TELA.QUERYSELECTOR('#DIAS').VALUE = RETORNAREGRANEGOCIO(ID ITEM TABELA );  
+  
+  
+ 
+ 
+ ###########################################################################################################
+	
+							        ***       SQL 		***
+																			
+ ###########################################################################################################
+
+ OBS >> NO CASO DO TBPDS O JAVA E O SQL SAO FEITOS JUNTOS, LOGO ALGUMAS FUNÇOES DE JOINS TEM SUAS ESTRURAS 
+		CHAMADAS DENTRO DE UMA CLASSE E CADA UMA ESTARA SUJEITA A SUA RESPECTIVA ALTERAÇAO
+		
+		
+ >> SELECT   	LISTA OS CAMPOS QUE CONTÊM DADOS DE INTERESSE.
+ 
+ >> FROM 		LISTA AS TABELAS QUE CONTÊM OS CAMPOS LISTADOS NA CLÁUSULA SELECT.
+
+ >> WHERE		ESPECIFICA CRITÉRIOS DE CAMPO QUE DEVEM SER ATENDIDOS POR CADA REGISTRO A SER 
+				INCLUÍDO NOS RESULTADOS.
+
+ >> ORDER BY	ESPECIFICA COMO CLASSIFICAR OS RESULTADOS.
+
+ >> GROUP BY	EM UMA SQL QUE CONTÉM FUNÇÕES AGREGADAS, LISTA CAMPOS QUE NÃO SÃO RESUMIDOS 
+				NA CLÁUSULA SELECT.
+
+ >> HAVING		EM UMA SQL QUE CONTÉM FUNÇÕES AGREGADAS, ESPECIFICA CONDIÇÕES QUE SE APLICAM 
+				AOS CAMPOS RESUMIDOS NA INSTRUÇÃO SELECT.
+
+		
+ --------------------------------------------------------------------------------------------------------------
+								FUNÇOES DE UNION E JOINS 
+ --------------------------------------------------------------------------------------------------------------
+ 
+ >> UNION ALL
+ 
+	O OPERADOR UNION PERMITE COMBINAR DUAS INSTRUÇÕES SELECT EM UMA. AS INSTRUÇÕES SELECT QUE VOCÊ 
+	COMBINAR DEVEM TER O MESMO NÚMERO DE CAMPOS DE SAÍDA, NA MESMA ORDEM, E COM OS MESMOS TIPOS DE 
+	DADOS OU COMPATÍVEIS. QUANDO VOCÊ EXECUTAR A CONSULTA, OS DADOS DE CADA CONJUNTO DE CAMPOS 
+	CORRESPONDENTES SÃO COMBINADOS EM UM CAMPO DE SAÍDA
+ 
+ EX 1 :
+ --> SELECT CAMPOSTABELA1
+ --> FROM TABELA1 
+ --> UNION [ALL]
+ --> SELECT CAMPOSTABELA2
+ --> FROM TABELA2
+ --> ;
+
+ EX PRATICO :
+ --> SELECT NOME, PRECO, PROMOCAO, DISPONIBILIDADE
+ --> FROM PRODUTOS
+ --> UNION ALL
+ --> SELECT NOME, PRECO, PROMOCAO, DISPONIBILIDADE
+ --> FROM SERVICOS 
+ --> ;
+
+ 
+--------------------------------------------------------------------------------------------------------------
+ 
+ >> INNER JOIN
+ 
+	A CLÁUSULA INNER JOIN COMPARA CADA LINHA DA TABELA A COM AS LINHAS DA TABELA B PARA ENCONTRAR TODOS OS
+	PARES DE LINHAS QUE SATISFAZEM A CONDIÇÃO DE JUNÇÃO. SE A CONDIÇÃO DE JUNÇÃO FOR AVALIADO COMO TRUE, 
+	OS VALORES DA COLUNA DAS LINHAS CORRESPONDENTES DAS TABELAS A E B SERÃO COMBINADOS EM UMA NOVA LINHA 
+	E INCLUÍDOS NO CONJUNTO DE RESULTADOS.
+ 
+ EX 1 : 
+ -->  SELECT A.NOME, B.NOME
+ -->  FROM TABELAA AS A
+ -->  INNER JOIN TABELAB AS B
+ -->  ON A.NOME = B.NOME
+ 
+ EX 2 : 
+ -->  SELECT <CAMPOS DA TABELA >
+ -->  FROM TABELA A
+ -->  INNER JOIN TABELA B
+ -->  ON A.KEY = B.KEY
+ 
+--------------------------------------------------------------------------------------------------------------
+
+ >> LEFT JOIN / RIGHT JOIN 
+ 
+	TEM COMO RESULTADO TODOS OS REGISTROS QUE ESTÃO NA TABELA A (MESMO QUE NÃO ESTEJAM NA TABELA B) E OS 
+	REGISTROS DA TABELA B QUE SÃO COMUNS À TABELA A
+	SE UMA LINHA DA TABELA “ESQUERDA” A NÃO TIVER NENHUMA LINHA CORRESPONDENTE DA TABELA “DIREITA” B, A 
+	CONSULTA IRÁ COMBINAR OS VALORES DA COLUNA DA LINHA DA TABELA “ESQUERDA” A COM NULL PARA CADA VALOR
+	DA COLUNA DA TABELA DA “DIREITA” B 
+	A RIGHT JOIN COMBINA DADOS DE DUAS OU MAIS TABELAS. A RIGHT JOIN COMEÇA A SELECIONAR DADOS DA TABELA 
+	“DIREITA” B  E A CORRESPONDER ÀS LINHAS DA TABELA “ESQUERDA” A.
+
+	A RIGHT JOIN RETORNA UM CONJUNTO DE RESULTADOS QUE INCLUI TODAS AS LINHAS DA TABELA “DIREITA” B
+	, COM OU SEM LINHAS CORRESPONDENTES NA TABELA “ESQUERDA” A. SE UMA LINHA NA TABELA DIREITA B NÃO
+	TIVER NENHUMA LINHA CORRESPONDENTE DA TABELA “ESQUERDA” A, A COLUNA DA TABELA “ESQUERDA” A NO 
+	CONJUNTO DE RESULTADOS SERÁ NULA IGUALMENTE AO QUE ACONTECE NO LEFT JOIN
+ 
+ EX 1 :
+ --> SELECT A.NOME, B.NOME                          | -->	SELECT A.NOME, B.NOME
+ --> FROM TABELAA AS A								| -->   FROM TABELAA AS A	
+ --> LEFT JOIN TABELAB AS B							| -->	RIGHT JOIN TABELAB AS B
+ --> ON A.NOME = B.NOME								| -->	ON A.NOME = B.NOME
+													  
+ EX 2 : 			                                  
+ --> SELECT <SELECT_LIST>						 	| -->	SELECT <SELECT_LIST>
+ --> FROM TABELA A									| -->	FROM TABELA A	
+ --> LEFT  JOIN TABELA B							| -->	RIGHT JOIN TABELA B
+ --> ON A.KEY = B.KEY								| -->	ON A.KEY = B.KEY
+
+--------------------------------------------------------------------------------------------------------------
+
+ >> CROSS JOIN
+ 
+	OBS: PARA O CROSS JOIN FUNCIONAR E IMPRESSINDIVEL QUE HAJA NO MINIMO 1 COLUNA EM COMUM ENTRE AS 2 TABELAS
+	A CLÁUSULA CROSS JOIN RETORNA TODAS AS LINHAS DAS TABELAS POR CRUZAMENTO, OU SEJA, PARA CADA LINHA DA 
+	TABELA ESQUERDA QUEREMOS TODOS OS LINHAS DA TABELAS DIREITA OU VICE-VERSA. ELE TAMBÉM É CHAMADO DE
+	PRODUTO CARTESIANO ENTRE DUAS TABELAS. 
+	
+ --> ELECT <SELECT_LIST>
+ --> ROM TABELA A
+ --> ROSS JOIN TABELA B
+ 	
+--------------------------------------------------------------------------------------------------------------	
+
+ >> OUTER JOIN
+
+	O OUTER JOIN (TAMBÉM CONHECIDO POR FULL OUTER JOIN OU FULL JOIN), CONFORME MOSTRA A FIGURA 8,
+	TEM COMO RESULTADO TODOS OS REGISTROS QUE ESTÃO NA TABELA A E TODOS OS REGISTROS DA TABELA B.
+
+ --> SELECT A.NOME, B.NOME
+ --> FROM TABELAA AS A
+ --> FULL OUTER JOIN TABELAB AS B
+ -->     ON A.NOME = B.NOME
+
+--------------------------------------------------------------------------------------------------------------
+
+ >> LEFT EXCLUDING JOIN / RIGHT EXCLUDING JOIN
+
+ 
+	RETORNA COMO RESULTADO TODOS OS REGISTROS QUE ESTÃO NA TABELA A E QUE NÃO ESTEJAM NA TABELA B.
+
+ --> SELECT A.NOME, B.NOME
+ --> FROM TABELAA AS A
+ --> LEFT JOIN TABELAB AS B
+ -->                 ON A.NOME = B.NOME
+ --> WHERE B.NOME IS NULL
+
+--------------------------------------------------------------------------------------------------------------
+
+ >> OUTER EXCLUDING JOIN / FULL JOIN 
+ 
+ 
+	TEREMOS COMO RESULTADO TODOS OS REGISTROS QUE ESTÃO NA TABELA B, MAS QUE NÃO ESTEJAM NA TABELA A, 
+	E TODOS OS REGISTROS QUE ESTÃO NA TABELA A, MAS QUE NÃO ESTEJAM NA TABELA B
+	
+ --> SELECT A.NOME, B.NOME
+ --> FROM TABELAA AS A
+ --> FULL OUTER JOIN TABELAB AS B
+ -->     ON A.NOME = B.NOME
+ --> WHERE A.NOME IS NULL OR B.NOME IS NULL
+
+  
+ ########################################################################################################### 
+	
+								********	JAVASCRIPT 		********
+ 
+ ###########################################################################################################
+ 
+ --------------------------------------------------------------------------------------------------------------
+										CONCEITOS E FUNCOES
+ --------------------------------------------------------------------------------------------------------------
+ 
+ >> JAVASCRIPT E A TIPAGEM JAVA 
+		JAVASCRIPT É UMA LINGUAGEM MAIS LIVRE EM COMPARAÇÃO A JAVA. VOCÊ NÃO TEM DE DECLARAR TODAS AS 
+		VARIÁVEIS, CLASSES E MÉTODOS. VOCÊ NÃO TEM QUE SE PREOCUPAR COM O FATO DOS MÉTODOS SEREM PÚBLICOS,
+		PRIVADOS OU PROTEGIDOS, E VOCÊ NÃO TEM QUE IMPLEMENTAR INTERFACES. VARIÁVEIS, PARÂMETROS E TIPO DE 
+		RETORNO DA  FUNÇÃO NÃO SÃO EXPLICITAMENTE TIPADOS.
+ 
+ 
+ >> UM IDENTIFICADOR JAVASCRIPT DEVE COMEÇAR COM UMA 
+	>> LETRA, 
+	>> UNDERLINE (_),
+	-----------------------------------
+	>> CIFRÃO ($); (USADO COMO PADRAO NA TECNICON) 
+	-----------------------------------
+	
+ >> NULL E UNDEFINED
+		SAO TIPOS DE DADOS DO JAVASCRIPT E SAO DISTINTOS 1 DO OUTRO
+		
+	>> NULL 
+		UMA VARIAVEL PODE SER SETADA COMO NULL (VAZIO) PARA SER ATRIBUIDA FUTURAMENTE SEM SOBRISCRIÇAO
+		NULL TEM O MESO CONCEITO DO SQL AONDE VAZIO RESERVA BITS PARA COLUNA SEM VALOR RESPECTIVO
+		   
+		   |_SALDO_|__ID__|__NOME___|_CREDITO_|
+		   | 23.30 | 2545 |  MUMEN  | 100.00  |
+		   | NULL  | 2121 | ZEZINHO | NULL    |
+		 
+ -->	VAR NOME = NULL
+ -->	CONSOLE.LOG(NOME)
+			//NULL
+		     
+	>> UNDEFINED
+		TIPO DE DADO PARA UMA VARIAVEL CUJA VALOR NAO FOI ATRIBUDO, APENAS INICIALIZADO
+		ISSO ACONTECE QUANDO NAO SE HA UM CUIDADO COM ALGO MUITO IMPORTANTE NA LINGUAGEM CHAMADA
+				**** HOISTING *** OU IÇAMENTO
+						AONDE TODAS VARIAVEIS DEVEM SER DECLARADAS NO TOPO DO CODIGO
+						
+			CONSOLE.LOG(NOME)
+			VAR NOME = MUMEN
+				// UNDEFINED 
+				
+			VAR NOME = MUMEN
+			CONSOLE.LOG(NOME)
+				// MUMEN
+
+ --------------------------------------------------------------------------------------------------------------
+										 DECLARANDO VARIÁVEIS
+--------------------------------------------------------------------------------------------------------------
+										 
+
+		VOCÊ PODE DECLARAR UMA VARIÁVEL DE TRÊS FORMAS:
+	
+	>> VAR. 
+		>> ESTA SINTAXE PODE SER USADA PARA DECLARAR TANTO VARIÁVEIS LOCAIS COMO VARIÁVEIS GLOBAIS.
+			>> VAR X = 42. 
+			
+	>> ADIÇÃO DE VALOR.
+		>> ISSO DECLARA UMA VARIÁVEL GLOBAL. ESSA DECLARAÇÃO GERA UM AVISO DE ADVERTÊNCIA NO JAVASCRIPT.
+		   NAO SE DEVE MAIS USAR DEVIDO AS BOAS PATRICAS DE DECLARAÇAO PARA COMPREENÇAO GLOBAL (MA PRATICA)
+			>> X = 42. 
+	
+	>>  LET.
+		>> ESSA SINTAXE PODE SER USADA PARA DECLARAR UMA VARIÁVEL LOCAL DE ESCOPO DE BLOCO. 
+			>> LET Y = 13.
+			
+ >> ESCOPO DE DECLARAÇAO DE VARIAVEL
+		>> QUANDO VOCÊ DECLARA UMA VARIÁVEL DENTRO DE UMA FUNÇÃO, É CHAMADA DE VARIÁVEL LOCAL
+	
+
+ ** VAR : VARIAVEL LOCAL 
+ 
+ --> IF (TRUE) {
+ --> 	VAR X = 5;
+ --> }
+ --> 	
+ --> CONSOLE.LOG(X);  
+			// 5
+			
+			
+ **	LET : VARIAVEL DE  BLOCO 
+ 
+ --> IF (TRUE) {
+ -->  LET Y = 5;
+ --> }
+ -->
+ --> CONSOLE.LOG(Y);  
+			// REFERENCEERROR: Y NÃO ESTÁ DEFINIDO
+	
+--------------------------------------------------------------------------------------------------------------
+									METODOS DE CONVERSAO
+--------------------------------------------------------------------------------------------------------------
+							
+  		NO CASO DE UM VALOR QUE REPRESENTA UM NÚMERO ESTÁ ARMAZENADO NA MEMÓRIA COMO UMA STRING, 
+ 		EXISTEM MÉTODOS PARA A CONVERSÃO.
+ 	    PARSEINT IRÁ RETORNAR APENAS NÚMEROS INTEIROS, ENTÃO SEU USO É RESTRITO PARA A CASA DOS DECIMAIS.
+ 
+ 		
+ >> PARSEINT()	
+ 		CONVERTE DE STRING PARA INTEIRO 
+ -->		CONSOLE.LOG(PARSEINT('STRING A SER CONVERTIDA') 
+ -->		CONSOLE.LOG(PARSEINT('10')
+			// 10
+
+--------------------------------------------------------------------------------------------------------------
+ >> PARSEFLOAT()
+ 		CONVERTE DE STRING PARA DECIMAL (PONTOFLUTUANTE) 
+ -->		CONSOLE.LOG(PARSEINT('STRING A SER CONVERTIDA') 
+ -->		CONSOLE.LOG(PARSEFLOAT('10.023')
+ 			// 10.023
+					
+ --------------------------------------------------------------------------------------------------------------   
+ >> TOFIXED
+		DELIMITA O NUMERO DE CASAS DECIMAIS DO OBJETO DECLARADO
+ -->		CONSOLE.LOG(PONTO FLUTUANTE . TOFIXED(N° DE CASAS A SER EXIBIDA ) 
+ -->		CONSOLE.LOG(23,9998.TOFIXED(2) 
+			// 23.99
+					
+--------------------------------------------------------------------------------------------------------------					
+ >> ISNAN
+		VERIFICA A VALIDADE DE UM NUMERO (IS NOT A NUMBER )
+ --> 		CONSOLE.LOG(ISNAN (VERIFICAÇAO)
+ -->		CONSOLE.LOG(ISNAN ('TESTENAN' )
+			// TRUE
+			
+ -->		CONSOLE.LOG(ISNAN ('14' )
+			// TRUE
+			
+ -->		CONSOLE.LOG(ISNAN (14)
+			// FALSE 
+					
+--------------------------------------------------------------------------------------------------------------					
+ >> MAX_VALUE / MIN_VALUE
+		FUNCAO QUE INFORMA QUAL O MAX E MNIMO DE VALORES QUE O JAVASCRIPT ACEITA 
+		ANTES DE TRANSFORMALO EM UM INIFINITO
+ -->		CONSOLE.LOG(NUMBER.MAX_VALUE )
+ -->		CONSOLE.LOG(NUMBER.MIN_VALUE )
+ 
+--------------------------------------------------------------------------------------------------------------
+ >> TYPEOFF 
+		DEFINE QUAL O TIPO DE VARIAVEL QUE FOI DECLARADO
+-->			VAR TESTE = 5	
+-->			CONSOLE.LOG(TESTE)
+-->			CONSOLE.LOG(TYPEOFF TESTE);
+				//5
+				//NUMBER
+
+--------------------------------------------------------------------------------------------------------------								
+								OBJETOS DE JAVASCRIPT								
+--------------------------------------------------------------------------------------------------------------		
+
+ >> A IDEIA DA ORIENTAÇAO DE OBJETOS DENTRO DO JAVASCRIPT E GUARDAR CONJUNDOS DE CHAVE E VALOR PARA ULTILIZAR
+	POSTERIORMENTE, FUNCIONA COMO UM ARRA ASSOCIATIVO 
+		>> E DETERMINADO POR CHAVES 
+	
+	
+ -->	 VAR "NOME DA VARIAVEL  = {
+ -->	  CHAVE : "VALOR_STRING ",
+ -->	  CHAVE : VALOR_INT ,
+ -->	  CHAVE : "VALOR_STRING ",
+ -->	  CHAVE : VALOR_BOOLEANO ,
+ -->	};
+ 
+ 
+ -->	VAR TESTEOBJETOS = {
+ -->	  NOME: "MUMEN ",
+ -->	  IDADE: 25,
+ -->	  PROFISSAO: "PROGRAMADOR_OU_QUASE",
+ -->	  ESTATRABALHANDO: TRUE,
+ -->	};
+ 
+ 
+ --- PODE-SE CHAMAR UMA CHAVE DO OBJETO PARA SE OBTER O VALOR ESPECIFICO DE TAL ---
+ 	
+ --> 	CONSOLE.LOG(TESTEOBJETOS.NOME)
+ -->		// MUMEN
+ 	
+ --- PODE-SE TAMBEM CONCATENAR AS CHAVES DOS OBJETOS COM STRINGS ---
+    
+ -->		CONSOLE.LOG( "MEU NOME É : " + TESTEOBJETOS.NOME)
+ -->		// MEU NOME E MUMEN 
+ 
+ --- PODE-SE ATRIBUIR NOVOS VALORES AO OBJETO SE CHAMADO PELA CHAVE ---
+
+ -->	VAR TESTEOBJETOS = {
+ -->	  NOME: "MUMEN ",
+ -->	  IDADE: 25,
+ -->	  PROFISSAO: "PROGRAMADOR_OU_QUASE",
+ -->	  ESTATRABALHANDO: TRUE,
+ -->	};
+ -->
+ -->  TESTEOBJETOS.NOME = 'ZEZINHO'
+ -->
+ -->  CONSOLE.LOG(OBJ.NOME);			
+ -->  CONSOLE.LOG(OBJ.IDADE);		    
+ -->  CONSOLE.LOG(OBJ.PROFISSAO); 
+			// ZEZINHO
+			// 25
+			// PROGRAMADOR_OU_QUASE
+
+ -- TAMBEM PODE-SE ATRIBUIR UMA NOVA CHAVE AO OBJETO JA EXISTENTE --- 
+ 
+ -->	VAR TESTEOBJETOS = {
+ -->	  NOME: "MUMEN ",
+ -->	  IDADE: 25,
+ -->	  PROFISSAO: "PROGRAMADOR_OU_QUASE",
+ -->	  ESTATRABALHANDO: TRUE,
+ -->	};
+ -->
+ -->  TESTEOBJETOS.TURNO = 'DIURNO '	
+ 
+ -->	VAR TESTEOBJETOS = {
+ -->	  NOME: "MUMEN ",
+ -->	  IDADE: 25,
+ -->	  PROFISSAO: "PROGRAMADOR_OU_QUASE",
+ -->	  ESTATRABALHANDO: TRUE,
+ -->	  TURNO: "DIURNO " 
+ -->	};
+ 
+ -------------------------------------------------------------------------------------------------------------							
+									       	ARRAYS 
+ --------------------------------------------------------------------------------------------------------------		
+ 
+ >> ARRAYS SAO OBJETOS BASEADOS EM INDICES LOGO POSSUEM UM TAMANHO ESTIPULADO NA CRIAÇAO  , PODEM TER ITENS 
+	DE VARIOS TIPOS DE INFORMAÇOES E DE DADOS DIFERENTES E POR ISSO SAO DENOMINADOS LISTAS.
+	PORÉM POR BOAS PRATICAS SE USA SEMPRE COM O MESMO TIPO DE INFORMAÇOES DEIXANDO OS ITENS DISCREPANTES PARA
+	OS OBJETOS
+	
+ LEMBRANDO QUE O JAVASCRIPT ASSIM COMO JAVA , C E OUTROS A CONTAGEM E SEMPRE INICIADA NO 0 E NAO NO 1
+ A CRIAÇAO DO ARRAY E DEFINIDA PELOS COLCHETES E QUANTIDADE DE ITENS INSERIDAS DIFERENTE DOS OBJETOS 
+ QUE SAO DEFINIDAS POR {} 
+ 
+	>> VAR "NOME_DO_ARRAY [];
+ 
+ 
+	
+ 
+
+
+ ###########################################################################################################  
+ ########################################################################################################### 
+ 
+									ESTRUTURAS DE FRONT E BACK END 
+ 
+ ###########################################################################################################
+ 
+ --------------------------------------------------------------------------------------------------------------
+ 		DECLARAÇAO DENTRO DA ESTRUTURA IMPORTANDO CLASSSE JA USADA NO METODO  
+ --------------------------------------------------------------------------------------------------------------
+ 
+ -->  PUBLIC STATIC STRING REMOVESINGLETON(VARIAVELSESSAO VS){
+ -->   STRING CONDICAO = "";  
+ -->   CONDICAO = " AND XXX.AAA = ASD"; 
+ -->   DDD(VS, CONDICAO);  
+ -->  } 
+ -->  
+ -->  PUBLIC STATIC STRING DDD(VARIAVELSESSAO VS, STRING CONDICAO){ 
+ -->   RETURN "SELECT XXX FROM XXX WHERE " + CONDICAO; 
+ -->  } 
+ 
+ 
+ ########################################################################################################## 
+ ########################################################################################################## 
+ 
+										CONCEITOS E EXEMPLOS 
+ 
+ ###########################################################################################################
+ 
+ --------------------------------------------------------------------------------------------------------------
+								ARMAZENAR CAMPOS DA TELA PRO BACK       
+										***JAVASCRIPT**** 
+ --------------------------------------------------------------------------------------------------------------
+ 
+ // QUEMSOU(PEGA TODA TELA)
+ // MONTASELETORCOMPONENT(QUEMSOU) PEGA TODOS OBEJTOS 
+ -->  QUEMSOU.QUERYSELECTORALL(MONTASELETORCOMPONENT()) 
+ -->   
+ -->   
+ -->  VAR "NOMEDAVAR" = TELA.QUERYSELECTOR('#IDDACLASSE'); 
+ -->    
+ -->    
+ -->  CAPTURAR TELA E ENVIAR DADOS ESCRITO: 
+ -->  
+ -->    LOTESPRODUZIRMRP.MONTASELECT = FUNCTION(TELA) {  
+ -->          VAR COMPONENTES = TELA.QUERYSELECTORALL(MONTASELETORCOMPONENT()); 
+ -->          VAR TEXTO = ''; 
+ -->          COMPONENTES.FOREACH(FUNCTION(ELEMENTO) {  
+ -->              TEXTO += (ELEMENTO.LABEL) + '=' + (ELEMENTO.VALUE) + '\N';  
+ -->          });  
+ -->          RETURN TEXTO;  
+ -->      };  
+ -->   
+ --------------------------------------------------------------------------------------------------------------  
+								*******PASSANDO DO FRONT PRO BACK*******  
+ --------------------------------------------------------------------------------------------------------------   
+							PEGAR FUNÇAO QUE O BOTAO CHAMA NO JAVASCRIPT    
+											***** JAVA  ****** 
+ 
+ 
+ APOS O OPEN DO JAVA ()  CHAMAR UMA FUNÇÃO  
+ 
+ -->   PRIVATE (RETORNO OU NAO ? )  NOME  ( RECEBER VARIAVEL DE SESSAO , TIPO   NOME DA VARIAVEL, 
+ -->   TIPO(ID) (NOME DA COLUNA DO ID )THROWS EXCECAOTECNICON  {
+ -->   
+ -->    	TCLIENTE( USADO PRA EDITAR A TABELA E INSERIR NO BANCO ) NOME DA TABELA = INSTANCIA  INSTANCIAR  
+ -->    	RECEBE 2 PARAMETROS . (VARIAVEL DE SESSAO , "NOME DA TABELA ")
+ -->    	*CREATE PEGA SELECT DA TABELA E DEFINE COMO PADRAO  
+ -->    	*INSERT INSERIR OS DADOS  -->    EDIT PARA EDITAR OS STATUS  
+ -->    	TABELACRIADA. CREATEDATASET();(PEGA OS CAMPOS E JOGA SELEC E OS CAMPOS PRA DENTRO DO BANCO );      	  
+ -->    	INSERIR DADOS DA TABELA   	  
+ -->    	NOME DA TABELA . INSERT ();     	 
+ -->    	NOME DA TABELA . FILED BY NAME ( "CAMPO").ASTIPO(NEWDATE);  
+										   (QUANDO DEIXADO EM BRANCO VOCE RETORNA A CONSULTA) 
+ -->    	NOME DA TABELA . FILEDBYNAME ( USUARIO ).ASSTRING(VS.GETVALOR(USUARIO));  
+ -->    	NOMEDATABELA. FILLEDBYNAME (TABELA ) .ASSTRING("NOME DA TABELA")  
+ -->    	  					PARA CONCILIAR COM PRODUTO DARIA O NOME DA TABELA OU ID COM NOME DO PRODUTO   
+ -->    	NOMEDATABELA.FILLEDBYNAME (ID ) AS.ITEGER(NOMEDA CLUNA DA PK OU LIGAÇAO)  
+ -->    	NOMEDATABELA.POST();  
+ -->   }  
+ -->    MONTARSELECT( VS , VS.GETPARAMETER("NOME DA VARIAVEL DO JAVASCRIPT EXECUTA SERVICO "), 
+		DATASET.FIELDBY 
+ -->    NAME("NOME DA PK"). ASTIPO())); 
+ -->      
+ -->    DATASET.CONDICACAO
+ 
+ 
+-------------------------------------------------------------------------------------------------------------- 
+								SELECT DA CONSULTA APOS CRIAR A AUDITORIA DE DADOS 
+--------------------------------------------------------------------------------------------------------------
+
+
+ 
+ --> DEFINIR QUAL BANCO SERA FEITO (EMPRESA)  
+ --> ORDEM   
+ -->   
+ --> SELECIONAR  NOME DA TABELA.COLUNA,  
+ -->   NOME DA TABELA.COLUNA,  
+ -->   NOME DA TABLEA.NOME DA COLUNA  
+ -->   NOME DA TABELA.DADOS DA TELA  
+ --> ORIGEM  NOME DA TABELA 
+ 
+                          ____________________________________________________            
+                         |                 								     |
+*************************|   EXEMPLO PRATICO DA APLICAÇAO DA ESTRUTURA ACIMA |********************************                            
+                         |___________________________________________________|  
+						 
+ -------------------------------------------------------------------------------------------------------------- 
+									***JAVASCRIPT****  
+ --------------------------------------------------------------------------------------------------------------  
+ -->  
+ --> 
+ -->  
+ --> LOTESPRODUZIRMRP.MONTASELECT = FUNCTION(TELA) {  
+ -->        VAR COMPONENTES = TELA.QUERYSELECTORALL(MONTASELETORCOMPONENT());  
+ -->        VAR TEXTO = '';  
+ -->        COMPONENTES.FOREACH(FUNCTION(ELEMENTO) {  
+ -->            TEXTO += (ELEMENTO.LABEL) + ' = ' + (ELEMENTO.VALUE) + '\N';  
+ -->        });  
+ -->        RETURN TEXTO;  
+ -->    };  
+ -->  
+
+ --------------------------------------------------------------------------------------------------------------              
+									***** JAVA  ******  
+ --------------------------------------------------------------------------------------------------------------   
+
+ 
+ --> PRIVATE VOID MONTARSELECT(VARIAVELSESSAO VS, STRING LEGENDA, INT CLOTE) THROWS EXCECAOTECNICON  {  
+ -->        TCLIENTDATASET FOLLOWUP = TCLIENTDATASET.CREATE(VS, "FOLLOWUP");  
+ -->        FOLLOWUP.CREATEDATASET();  
+ -->        FOLLOWUP.INSERT();  
+ -->        FOLLOWUP.FIELDBYNAME("DATA").ASDATE(NEW DATE());  
+ -->        FOLLOWUP.FIELDBYNAME("HORA").ASTIME(NEW DATE());  
+ -->        FOLLOWUP.FIELDBYNAME("FOLLOWUP").ASSTRING(LEGENDA);  
+ -->        FOLLOWUP.FIELDBYNAME("USUARIO").ASSTRING(VS.GETVALOR("USUARIO"));  
+ -->        FOLLOWUP.FIELDBYNAME("TABELA").ASSTRING("LOTEOP");  
+ -->        FOLLOWUP.FIELDBYNAME("ID").ASINTEGER(CLOTE);  
+ -->        FOLLOWUP.POST();  
+ -->    }  
+ -->   
+ 
+ --------------------------------------------------------------------------------------------------------------								
+									*****  SQL   ******  															
+-----------------------------------------------------------------------------------------------------------
+ 
